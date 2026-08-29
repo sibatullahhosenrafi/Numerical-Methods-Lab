@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define EPSILON 0.001
-#define steps 0.45
+double ep = 0.001;
+double step = 0.45;
 
-double coef[20];
+double coeff[20];
 int n;
 
 double func(double x)
@@ -13,33 +13,44 @@ double func(double x)
 
     for(int i = 0; i <= n; i++)
     {
-        result += coef[i] * pow(x, n - i);
+        result += coeff[i] * pow(x, n - i);
     }
 
     return result;
 }
 
-double secant(double x1, double x2, int &iteration)
+double derivative(double x)
+{
+    double result = 0;
+
+    for(int i = 0; i < n; i++)
+    {
+        result += (n - i) * coeff[i] * pow(x, n - i - 1);
+    }
+
+    return result;
+}
+
+double newton(double x, int &iteration)
 {
     iteration = 0;
 
     while(true)
     {
-        double f1 = func(x1);
-        double f2 = func(x2);
+        double fx = func(x);
+        double dfx = derivative(x);
 
-        double x0 = x2 - (f2 * (x2 - x1)) / (f2 - f1);
+        double x0 = x - fx / dfx;
 
         iteration++;
 
-        if(abs(x0 - x2) < EPSILON &&
-           abs(func(x0) / f2) < EPSILON)
+        if(abs(x0 - x) < ep &&
+           abs(func(x0) / fx) < ep)
         {
             return x0;
         }
 
-        x1 = x2;
-        x2 = x0;
+        x = x0;
     }
 }
 
@@ -47,11 +58,11 @@ int main()
 {
     cin >> n;
 
-    // Input coefficients:
+    // Input:
     // an, an-1, ..., a1, a0
     for(int i = 0; i <= n; i++)
     {
-        cin >> coef[i];
+        cin >> coeff[i];
     }
 
     // Calculate xmax
@@ -59,15 +70,15 @@ int main()
 
     for(int i = 1; i <= n; i++)
     {
-        xmax = max(xmax, abs(coef[i] / coef[0]));
+        xmax = max(xmax, abs(coeff[i] / coeff[0]));
     }
 
     xmax = 1 + xmax;
 
     double x1 = -xmax;
-    double x2 = x1 + steps;
+    double x2 = x1 + step;
 
-    int rootCount = 0;
+    int rootcount = 0;
 
     while(x2 <= xmax)
     {
@@ -75,22 +86,26 @@ int main()
         {
             int iteration;
 
-            rootCount++;
+            rootcount++;
 
-            double root = secant(x1, x2, iteration);
+            // Use x1 as initial guess
+            double root = newton(x1, iteration);
 
-            cout << rootCount << " root : " << root << endl;
+            cout << rootcount << " root : "
+                 << root << endl;
 
-            cout << "Search interval of " << rootCount
-                 << " root : [" << x1 << "," << x2 << "]"
+            cout << "Search interval of " << rootcount
+                 << " root : ["
+                 << x1 << "," << x2 << "]"
                  << endl;
 
-            cout << "Iteration needed for " << rootCount
-                 << " root : " << iteration << endl;
+            cout << "Iteration needed for " << rootcount
+                 << " root : "
+                 << iteration << endl;
         }
 
-        x1 += steps;
-        x2 += steps;
+        x1 += step;
+        x2 += step;
     }
 
     return 0;
