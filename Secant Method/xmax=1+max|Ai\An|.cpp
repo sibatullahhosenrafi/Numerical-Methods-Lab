@@ -3,7 +3,7 @@ using namespace std;
 double epsilon=0.00001;
 double step=0.5;
 int n;
-int a[20];
+double a[20];
 double func(double x)
 {
     double sum=0;
