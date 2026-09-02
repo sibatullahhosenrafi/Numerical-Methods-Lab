@@ -1,3 +1,23 @@
+/*
+Class Work A1
+Write a program to find all roots of any equation using the secant method. For each
+root continue the loop until |x n+1/-x n|<E AND |f(x .. 1)| <E, where E =10-3.
+Search interval (-|xmaxl,|xmaxl), where |xmaxl is given in eqn (i).
+|Xmax |=1+ max(a i / a n) (1)
+where i=0, .... ,n. The step size of the search will be 0.45.
+User Input:
+No. of degree of the equation: 4
+Coefficients of the equation: 1,0,-5,0,4 or 1,-3,2,6,0 (from an to ag)
+Output Format:
+Print the function (e.g, x^4-5x^2+4=0)
+Root 1: X
+Search interval for root 1=[Y,Z]
+Iteration needed for the root 1=I
+Similarly, for the other roots
+Hint: The standard polynomial equation of (highest) degree n:
+anxn + an-1xn-1+ ... +a1x + ag = 0 ... (2)
+*/
+
 #include<bits/stdc++.h>
 using namespace std;
 double epsilon=0.00001;
@@ -60,7 +80,10 @@ int main()
           cout<<root<<endl;
           cout<<"Int : ["<<x1<<","<<x2<<"]"<<endl;
           cout<<iteration<<endl;
+          // for any one root of the equation
+          // break;//just break it.
       }
+          // x1 can also be one root of the function so for only one root just put a break at the end;
       else if(fabs(func(x1))<epsilon)
       {    rootcnt++;
           cout<<rootcnt<<endl;
@@ -68,6 +91,7 @@ int main()
 
          cout<<"Int : ["<<x1<<","<<x2<<"]"<<endl;
           cout<<"iteration 0"<<endl;
+       // break
       }
       x1+=step;
       x2+=step;
